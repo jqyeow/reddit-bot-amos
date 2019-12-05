@@ -4,6 +4,7 @@ class Configuration {
 
 	readonly NODE_ENV: string = Configuration.dotenv('NODE_ENV')
 	readonly SUBREDDIT: string = Configuration.dotenv('SUBREDDIT')
+	// readonly COOLDOWN: number =
 
 	// readonly AWS_ACCESS_KEY: string = Configuration.dotenv('AWS_ACCESS_KEY_ID')
 	// readonly AWS_SECRET_ACCESS_KEY: string = Configuration.dotenv('AWS_SECRET_ACCESS_KEY')

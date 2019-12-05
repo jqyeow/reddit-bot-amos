@@ -4,21 +4,16 @@ import {bool} from "aws-sdk/clients/signer";
 
 export default class Logic {
 
-	static a(str?: string) {
-		let b: string = str.toLowerCase()
-	}
-
 	static is_amos_yee_post(post: Post): boolean {
-
-		let text = post.t1 ? post.t1.body.toLowerCase() : post.t3.selftext.toLowerCase()
 
 		switch(post.kind) {
 			case Kind.Comment:
-				return post.t1.body.toLowerCase().includes('amos yee')
+				return post.t1?.body.toLowerCase().includes('amos yee') ?? false
 
 			case Kind.Thread:
-				return (post.t3.selftext.toLowerCase().includes('amos yee')
-					|| post.t3.title.toLowerCase().includes('amos'))
+				return (post.t3?.selftext.toLowerCase().includes('amos yee')
+					|| post.t3?.title.toLowerCase().includes('amos')) ?? false
+
 			default:
 				// TODO: Change ErrorType
 				throw new Error('RuntimeError. This should never have occurred.')
@@ -31,8 +26,8 @@ export default class Logic {
 	static is_new_amos_thread(comment: Post, past_threads: {id: string}[]): boolean {
 		return past_threads.some(it => {
 			switch(comment.kind) {
-				case Kind.Comment: return comment.t1.link_id.includes(it.id)
-				case Kind.Thread: return comment.t3.id === it.id
+				case Kind.Comment: return comment.t1?.link_id.includes(it.id)
+				case Kind.Thread: return comment.t3?.id === it.id
 
 				default:
 					// TODO: Change ErrorType
@@ -44,7 +39,7 @@ export default class Logic {
 	/**
 	 *
 	 */
-	static is_new_thread(): boolean {
-		throw new Error('NotImplementedException')
+	static is_past_cooldown(comment: Post, last_comment: Post, cooldown: number): boolean {
+		return comment.data.created_utc - last_comment.data.created_utc >= cooldown
 	}
 }
