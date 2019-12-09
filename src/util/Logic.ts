@@ -1,45 +1,34 @@
-import {Post} from '../../lib/reddit_api/RedditAPI'
-import {Kind, T1_Data} from '../../lib/reddit_api/types/Comments.type'
-import {bool} from "aws-sdk/clients/signer";
-
+import {Comment} from '../../lib/reddit_api/types/Comments.type'
+import {Post} from '../../lib/reddit_api/types/Posts.type'
+import {Common} from '../../lib/reddit_api/types/Misc.type'
 export default class Logic {
 
-	static is_amos_yee_post(post: Post): boolean {
+	static is_amos_yee_comment(comment: Comment): boolean {
+		return comment.data.body.toLowerCase().includes('amos yee') ?? false
+	}
 
-		switch(post.kind) {
-			case Kind.Comment:
-				return post.t1?.body.toLowerCase().includes('amos yee') ?? false
-
-			case Kind.Thread:
-				return (post.t3?.selftext.toLowerCase().includes('amos yee')
-					|| post.t3?.title.toLowerCase().includes('amos')) ?? false
-
-			default:
-				// TODO: Change ErrorType
-				throw new Error('RuntimeError. This should never have occurred.')
-		}
+	static is_amos_yee_thread(post: Post): boolean {
+		return (post.data.selftext.toLowerCase().includes('amos yee')
+			|| post.data.title.toLowerCase().includes('amos'))
 	}
 
 	/**
 	 * Returns true if thread has not been encountered before
 	 */
-	static is_new_amos_thread(comment: Post, past_threads: {id: string}[]): boolean {
-		return past_threads.some(it => {
-			switch(comment.kind) {
-				case Kind.Comment: return comment.t1?.link_id.includes(it.id)
-				case Kind.Thread: return comment.t3?.id === it.id
+	static is_new_amos_thread(thing: Post | Comment, past_threads: HistoricPost[]): boolean {
+		let thread_id: string
+		if (thing.kind === 't1') thread_id = (thing as Comment).data.link_id
+		else thread_id = (thing as Post).data.name
 
-				default:
-					// TODO: Change ErrorType
-					throw new Error('RuntimeError. This should never have occurred.')
-			}
+		return past_threads.some((it)=>{
+			return it.thread_id === thread_id
 		})
 	}
 
 	/**
 	 *
 	 */
-	static is_past_cooldown(comment: Post, last_comment: Post, cooldown: number): boolean {
-		return comment.data.created_utc - last_comment.data.created_utc >= cooldown
-	}
+	// static is_past_cooldown(comment: ChildData, last_comment: ChildData, cooldown: number): boolean {
+	// 	return comment.data.created_utc - last_comment.data.created_utc >= cooldown
+	// }
 }

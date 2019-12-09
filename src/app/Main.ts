@@ -1,19 +1,41 @@
 import {Reddit} from './Spring'
 import Config from './Configuration'
 import Logic from '../util/Logic'
-import {Post} from '../../lib/reddit_api/RedditAPI'
+import {Common} from '../../lib/reddit_api/types/Misc.type'
+import {Comment} from "../../lib/reddit_api/types/Comments.type";
+import {Post} from "../../lib/reddit_api/types/Posts.type";
 
 async function run(): Promise<void> {
-	let comments = await Reddit.comments(Config.SUBREDDIT)
-	for (const it of comments) {
-		if (Logic.is_amos_yee_post(it)
-			&& Logic.is_new_amos_thread(it, ([{id: '123'}]))
-			// && Logic.is_past_cooldown(it, ({} as Post), 1)
-		) await onAmosYeePost(it)
-	}
+
+	let historicPosts: HistoricPost[]
+
+	Reddit.comments(Config.SUBREDDIT).then(comments=>{
+		comments.forEach(it => {
+			if (Logic.is_amos_yee_comment(it)
+				&& Logic.is_new_amos_thread(it, historicPosts)) {
+				onAmosYeePost(it)
+			}
+		})
+	})
+
+	Reddit.posts(Config.SUBREDDIT).then(posts=>{
+		posts.forEach(it => {
+			if (Logic.is_amos_yee_thread(it)
+				&& Logic.is_new_amos_thread(it, historicPosts)) {
+				onAmosYeePost(it)
+			}
+		})
+	})
 }
 
-async function onAmosYeePost(comment: Post): Promise<void> {
+async function onAmosYeePost(post: Common): Promise<void> {
 	let text = 'RESET THE AMOS YEE COUNTER!'
-	await Reddit.reply(comment, text)
+	await Reddit.reply(post.data.id, text)
+
+	let asd: HistoricPost = {
+		author: post.data.author,
+		date: undefined,
+		thread_title: post.kind === 't1' ? (post as Comment).data.link_title : (post as Post).data.title,
+		thing_url: ""
+	}
 }
