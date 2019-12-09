@@ -47,6 +47,21 @@ export class AwsDynamodb<T extends object> extends Database<T> {
 		})
 	}
 
+	async scan(): Promise<T[]> {
+		return new Promise((resolve, reject) => {
+			this.ddb.scan({TableName: this.table}, (err, data) => {
+				if (err) {
+					reject(err)
+				} else if (!data || !data.Items || data.Items.length <= 0) {
+					resolve([])
+				} else {
+					// @ts-ignore
+					resolve(data.Items)
+				}
+			})
+		})
+	}
+
 	async update(key: string, value: T): Promise<void> {
 		const current_data: T = await this.select(key)
 		const new_data = {...current_data, ...value}

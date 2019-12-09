@@ -11,6 +11,7 @@
     "test": "NODE_ENV=test jest --setupFiles dotenv/config",
     "test_win": "set NODE_ENV=test&&jest --setupFiles dotenv/config",
     "deploy": "NODE_ENV=development serverless deploy --stage development",
+    "deploy_win": "set NODE_ENV=development&&serverless deploy --stage development",
     "remove": "NODE_ENV=development serverless remove --stage development"
   },
   "author": "aelesia",

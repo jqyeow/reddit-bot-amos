@@ -1,7 +1,11 @@
 import RedditAPI from '../../lib/reddit_api/RedditAPI'
 import {DBHash} from '../../lib/aws-dynamodb/DBHash'
 import {Post} from '../../lib/reddit_api/types/Post.type'
-import Config from "./Configuration";
+import Config from './Configuration'
+import * as AWS from 'aws-sdk'
+
+AWS.config.secretAccessKey = Config.AWS_SECRET_ACCESS_KEY
+AWS.config.accessKeyId = Config.AWS_ACCESS_KEY
 
 export const Reddit = new RedditAPI()
 

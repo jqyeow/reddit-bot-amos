@@ -6,8 +6,9 @@ class Configuration {
 	readonly SUBREDDIT: string = Configuration.dotenv('SUBREDDIT')
 	// readonly COOLDOWN: number =
 
-	// readonly AWS_ACCESS_KEY: string = Configuration.dotenv('AWS_ACCESS_KEY_ID')
-	// readonly AWS_SECRET_ACCESS_KEY: string = Configuration.dotenv('AWS_SECRET_ACCESS_KEY')
+	readonly AWS_ACCESS_KEY: string = Configuration.dotenv('AWS_ACCESS_KEY_ID')
+	readonly AWS_SECRET_ACCESS_KEY: string = Configuration.dotenv('AWS_SECRET_ACCESS_KEY')
+	readonly AWS_REGION: string = Configuration.dotenv('AWS_REGION')
 
 	readonly DB_POSTS: string = Configuration.aws_resource('DB_POSTS')
 
