@@ -7,20 +7,20 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
-export interface Posts {
+export interface Threads {
 	kind: string;
-	data: PostsData;
+	data: ThreadsData;
 }
 
-export interface PostsData {
+export interface ThreadsData {
 	modhash:  string;
 	dist:     number;
-	children: Post[];
+	children: Thread[];
 	after:    string;
 	before:   null;
 }
 
-export interface Post {
+export interface Thread {
 	kind: string;
 	data: ChildData;
 }

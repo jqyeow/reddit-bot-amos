@@ -9,6 +9,8 @@ class Configuration {
 	// readonly AWS_ACCESS_KEY: string = Configuration.dotenv('AWS_ACCESS_KEY_ID')
 	// readonly AWS_SECRET_ACCESS_KEY: string = Configuration.dotenv('AWS_SECRET_ACCESS_KEY')
 
+	readonly DB_POSTS: string = Configuration.aws_resource('DB_POSTS')
+
 	/**
 	 *  Generates AWS Resource name using the 'service-node_env-resource' convention
 	 */

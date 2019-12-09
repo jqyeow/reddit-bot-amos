@@ -10,7 +10,7 @@ describe('RedditAPI', () => {
 	})
 
 	test('Threads', async () => {
-		let results = await reddit.posts('testingground4bots')
+		let results = await reddit.threads('testingground4bots')
 		expect(results.length).toEqual(25)
 	})
 })

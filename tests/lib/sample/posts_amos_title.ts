@@ -1,7 +1,7 @@
-import {Posts} from '../../../lib/reddit_api/types/Posts.type'
+import {Threads} from '../../../lib/reddit_api/types/Threads.type'
 
 // @ts-ignore
-const post_amos_title: Posts = {
+const post_amos_title: Threads = {
 	'kind': 'Listing',
 	'data': {
 		'modhash': 'lh1yivhgzf18391927f86596e601e4fb2a9c6c7941abef86c3',

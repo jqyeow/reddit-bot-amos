@@ -1,4 +1,4 @@
-import {Posts} from '../../../lib/reddit_api/types/Posts.type'
+import {Threads} from '../../../lib/reddit_api/types/Threads.type'
 
 // @ts-ignore
 const post_amos_selftext: Post = {
