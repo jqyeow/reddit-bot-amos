@@ -22,6 +22,10 @@ export class DBHash<T extends object> extends Database<T> {
 	}
 
 	async scan(): Promise<T[]> {
+		if (!this.db[this.table]) {
+			this.db[this.table] = {}
+			return []
+		}
 		let rows = this.db[this.table]
 		return Object.keys(rows).map((key)=>{
 			return Object.assign({key}, rows[key])

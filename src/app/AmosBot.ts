@@ -3,13 +3,11 @@ import Config from './Configuration'
 import Logic from '../util/Logic'
 import {Post} from '../../lib/reddit_api/types/Post.type'
 
-class AmosBot {
+export class AmosBot {
 	historicPosts: Post[] = null as any
 
 	async init(): Promise<void> {
-		this.historicPosts = (await DB_Posts.scan()).map(it=>{
-			return it.value
-		})
+		this.historicPosts = await DB_Posts.scan()
 	}
 
 	async run(): Promise<void> {

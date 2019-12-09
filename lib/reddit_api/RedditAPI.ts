@@ -46,6 +46,7 @@ export default class RedditAPI {
 	}
 
 	async reply(thing_id: string, text: string): Promise<void> {
+		console.log(`Replying ${thing_id} with ${text}`)
 		// await Http
 		// 	.url('https://oauth.reddit.com/api/comment')
 		// 	.body_forms({thing_id: comment.id, text: text})

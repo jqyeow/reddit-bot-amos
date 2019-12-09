@@ -21,6 +21,7 @@
     "@types/jest": "^24.0.23",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "eslint": "^6.7.2",
+    "serverless": "^1.59.3",
     "serverless-dotenv-plugin": "^2.1.1",
     "serverless-offline": "^5.12.1",
     "serverless-plugin-include-dependencies": "^4.0.0",
