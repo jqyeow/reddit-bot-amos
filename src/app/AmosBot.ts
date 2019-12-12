@@ -2,7 +2,6 @@ import {DB_Posts, Reddit} from './Spring'
 import Config from './Configuration'
 import Logic from '../util/Logic'
 import {Post} from '../../lib/reddit_api/types/Post.type'
-import {Util} from '../util/Util'
 import Filter from '../util/Filter'
 import {Reply} from './Reply'
 
