@@ -37,6 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var AmosBot_1 = require("../src/app/AmosBot");
+var Reply_1 = require("../src/app/Reply");
+var Control_1 = require("../lib/ext/Control");
+require('../lib/ext/Array');
+require('../lib/ext/String');
 describe('Describe', function () {
     test('Test Pass', function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -63,6 +67,25 @@ describe('Describe', function () {
                 case 2:
                     _a.sent();
                     console.log('help');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    test('Random', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            console.log(Reply_1.Reply.reset_counter({ date: 1576178177 }, { date: 1575909730 }));
+            return [2 /*return*/];
+        });
+    }); });
+    test('asd', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log('start');
+                    return [4 /*yield*/, Control_1.sleep('5'.sec())];
+                case 1:
+                    _a.sent();
+                    console.log('5 seconds later');
                     return [2 /*return*/];
             }
         });

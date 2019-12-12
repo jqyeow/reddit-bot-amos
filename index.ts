@@ -1,5 +1,5 @@
-import {AmosBot} from './src/app/AmosBot';
-
+import {AmosBot} from './src/app/AmosBot'
+require('./lib/ext/Array');
 
 (async()=>{
 	let bot = new AmosBot()
@@ -7,3 +7,4 @@ import {AmosBot} from './src/app/AmosBot';
 	await bot.run()
 	setInterval(()=>bot.run(), 10000)
 })()
+

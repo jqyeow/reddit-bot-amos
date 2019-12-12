@@ -12,6 +12,7 @@ class Configuration {
 
 	readonly DB_POSTS: string = Configuration.aws_resource('DB_POSTS')
 
+	readonly REDDIT_SELF: string = Configuration.dotenv('REDDIT_SELF')
 	/**
 	 *  Generates AWS Resource name using the 'service-node_env-resource' convention
 	 */

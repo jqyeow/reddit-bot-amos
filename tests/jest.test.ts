@@ -1,5 +1,9 @@
 import {DB_Posts, Reddit} from "../src/app/Spring";
 import {AmosBot} from "../src/app/AmosBot";
+import {Reply} from "../src/app/Reply";
+import {sleep} from "../lib/ext/Control";
+require('../lib/ext/Array');
+require('../lib/ext/String');
 
 describe('Describe', () => {
 
@@ -21,5 +25,18 @@ describe('Describe', () => {
 		await bot.init()
 		await bot.run()
 		console.log('help')
+	})
+
+	test('Random', async()=> {
+		console.log(Reply.reset_counter(
+			{date: 1576178177 } as any,
+			{date: 1575909730} as any
+		))
+	})
+
+	test('asd', async()=> {
+		console.log('start')
+		await sleep('5'.sec())
+		console.log('5 seconds later')
 	})
 })

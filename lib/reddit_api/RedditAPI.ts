@@ -13,14 +13,14 @@ export default class RedditAPI {
 
 		return data.data.children.map<Post>(it=>{
 			return {
-				id: it.data.id,
+				id: `$t1_${it.data.id}`,
 				author: it.data.author,
 				body: it.data.body,
 				date: it.data.created_utc,
 				kind: Kind.Comment,
 				thread_id: it.data.link_id,
 				title: it.data.link_title,
-				url: it.data.link_url
+				url: `https://reddit.com${it.data.permalink}`
 			}
 		})
 	}

@@ -1,26 +1,40 @@
-import {Kind, Post} from "../../lib/reddit_api/types/Post.type";
+import {Post} from '../../lib/reddit_api/types/Post.type'
+import {bool} from "aws-sdk/clients/signer";
+import Config from "../app/Configuration";
 
-export class Filter {
-	new_post_since(post: Post, utc: number) {
-		return post.date >= utc
+class Filter {
+
+	private latest_comment_time: number = 0
+	private latest_thread_time: number = 0
+
+	unread_threads(posts: Post[]): Post[] {
+		let unread = posts.filter(it => { return it.date > this.latest_thread_time })
+
+		let latest_time = unread.map(it => {
+			return it.date
+		}).max()
+
+		this.latest_thread_time = this.latest_thread_time > latest_time ? this.latest_thread_time : latest_time
+		return unread
 	}
 
-	is_amos_yee_comment(post: Post): boolean {
-		if (post.kind !== Kind.Comment) throw Error('Not a Comment: ' + post)
+	unread_comments(posts: Post[]): Post[] {
+		let unread = posts.filter(it => { return it.date > this.latest_comment_time })
 
-		return post.body.toLowerCase().includes('amos yee')
+		let latest_time = unread.map(it => {
+			return it.date
+		}).max()
+
+		this.latest_comment_time = this.latest_comment_time > latest_time ? this.latest_comment_time : latest_time
+		return unread
 	}
 
-	is_amos_yee_thread(post: Post): boolean {
-		if (post.kind !== Kind.Thread) throw Error('Not a Thread: ' + post)
-
-		return (post.body.toLowerCase().includes('amos yee')
-			|| post.title.toLowerCase().includes('amos'))
-	}
-
-	is_new_amos_thread(post: Post, past_threads: Post[]): boolean {
-		return !past_threads.some(it=>{
-			return post.thread_id === it.thread_id
-		})
+	self_posts(post: Post): boolean {
+		if (post.author === Config.REDDIT_SELF) {
+			console.log(`Ignoring #${post.id} as it was posted by self`)
+			return false
+		}
+		return true
 	}
 }
+export default new Filter()
