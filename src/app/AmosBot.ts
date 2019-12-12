@@ -2,28 +2,31 @@ import {DB_Posts, Reddit} from './Spring'
 import Config from './Configuration'
 import Logic from '../util/Logic'
 import {Post} from '../../lib/reddit_api/types/Post.type'
+import {Date} from "../util/Date";
 
 export class AmosBot {
-	historicPosts: Post[] = null as any
+	historic_posts: Post[] = null as any
+	last_scan = Date.utc()
 
 	async init(): Promise<void> {
-		this.historicPosts = await DB_Posts.scan()
+		this.historic_posts = await DB_Posts.scan()
 	}
 
 	async run(): Promise<void> {
 		Reddit.comments(Config.SUBREDDIT).then(comments=>{
-			comments.forEach(it => {
-				if (Logic.is_amos_yee_comment(it)
-					&& Logic.is_new_amos_thread(it, this.historicPosts)) {
-					this.onAmosYeePost(it)
-				}
-			})
+			comments
+				.forEach(it => {
+					if (Logic.is_amos_yee_comment(it)
+					&& Logic.is_new_amos_thread(it, this.historic_posts)) {
+						this.onAmosYeePost(it)
+					}
+				})
 		})
 
 		Reddit.threads(Config.SUBREDDIT).then(threads=>{
 			threads.forEach(it => {
 				if (Logic.is_amos_yee_thread(it)
-					&& Logic.is_new_amos_thread(it, this.historicPosts)) {
+					&& Logic.is_new_amos_thread(it, this.historic_posts)) {
 					this.onAmosYeePost(it)
 				}
 			})
@@ -35,7 +38,7 @@ export class AmosBot {
 		let text = 'RESET THE AMOS YEE COUNTER!'
 		await Reddit.reply(post.id, text)
 
-		this.historicPosts.push(post)
-		await DB_Posts.insert(post.date.toString(), post)
+		this.historic_posts.push(post)
+		await DB_Posts.insert(post.id, post)
 	}
 }

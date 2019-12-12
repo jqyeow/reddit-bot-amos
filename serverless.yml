@@ -41,6 +41,9 @@ resources:
       DeletionPolicy: ${env:DB_DEL_POLICY}
       Properties:
         TableName: ${self:custom.prefix}${env:DB_POSTS}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -63,7 +66,6 @@ resources:
 
 
 plugins:
-  - serverless-plugin-typescript
   - serverless-offline
   - serverless-dotenv-plugin
   - serverless-plugin-include-dependencies
