@@ -71,24 +71,13 @@ export default class RedditAPI{
 	}
 
 	async reply(thing_id: string, text: string): Promise<void> {
-		// console.log(`Replying ${thing_id} with ${text}`)
-		// await Http
-		// 	.url('https://oauth.reddit.com/api/comment')
-		// 	.auth_oauth2_password(this.oauth2_token)
-		// 	.body_forms({thing_id: thing_id, text: text})
-		// 	.
-		// await Http
-		// 	.url('https://oauth.reddit.com/api/comment')
-		// 	.body_forms({thing_id: comment.id, text: text})
-		// 	.post()
-		// let id = comment.t1
-		// let a: string | undefined
-		// return new Promise((resolve)=>{
-		// 	console.log(`Replied to ${comment}: ${text}`)
-		// 	resolve()
-		// })
+		await (this.oauth2
+			.url('https://oauth.reddit.com/api/comment')
+			.body_forms({thing_id, text})
+			.post())
 	}
 
+	/** @deprecated **/
 	async token(): Promise<Token> {
 		return (await Http.url('https://www.reddit.com/api/v1/access_token')
 			.header('User-Agent', '')
