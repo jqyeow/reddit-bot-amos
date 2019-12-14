@@ -1,6 +1,6 @@
 import {AmosBot} from './src/app/AmosBot'
-import {RedditAPIErr} from "./lib/reddit_api/RedditAPIErr";
-import {Logger} from "./lib/Logger";
+import {RedditAPIErr} from './lib/reddit_api/RedditAPIErr'
+import {Log} from "./src/app/Spring";
 require('./lib/ext/Array');
 
 (async()=>{
@@ -8,8 +8,8 @@ require('./lib/ext/Array');
 	await bot.init()
 	setInterval(()=>{
 		bot.run().catch(e => {
-			if (e instanceof RedditAPIErr.General) Logger.error({context: 'bot', error: e})
-			else if (e instanceof Error) Logger.error({context: 'bot', error: e})
+			if (e instanceof RedditAPIErr.General) Log.error('bot', e)
+			else if (e instanceof Error) Log.error('bot', e)
 		})
 	}, 10000)
 })()

@@ -1,7 +1,6 @@
 import {Post} from '../../lib/reddit_api/types/Post.type'
-import {bool} from "aws-sdk/clients/signer";
-import Config from "../app/Configuration";
-import {Logger} from "../../lib/Logger";
+import Config from '../app/Configuration';
+import {Log} from "../app/Spring";
 
 class Filter {
 
@@ -32,7 +31,7 @@ class Filter {
 
 	self_posts(post: Post): boolean {
 		if (post.author === Config.REDDIT_SELF) {
-			Logger.info({context: 'self_post', message: {id: post.id}})
+			Log.info('self', {id: post.id})
 			return false
 		}
 		return true

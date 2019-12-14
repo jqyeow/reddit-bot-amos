@@ -1,12 +1,12 @@
 import {Kind, Post} from '../../lib/reddit_api/types/Post.type'
-import {bool} from 'aws-sdk/clients/signer'
-import {RedditAPIErr} from "../../lib/reddit_api/RedditAPIErr";
-import {Logger} from "../../lib/Logger";
+import {Log} from "../app/Spring";
+import {InvalidArgumentError} from "../../lib/ext/Errors";
+
 export default class Logic {
 
 	static is_amos_yee_comment(comment: Post): boolean {
 		if (comment.body.toLowerCase().includes('amos yee')) {
-			Logger.info({context: 'is_amos_yee_comment', message: comment.id, count: 1})
+			Log.info('is_amos_yee_comment', comment.id).count()
 			return true
 		}
 		return false
@@ -15,7 +15,7 @@ export default class Logic {
 	static is_amos_yee_thread(thread: Post): boolean {
 		if (thread.body.toLowerCase().includes('amos yee')
 			|| thread.title.toLowerCase().includes('amos')) {
-			Logger.info({context: 'is_amos_yee_thread', message: thread.id, count: 1})
+			Log.info('is_amos_yee_thread', thread.id).count()
 			return true
 		}
 		return false
@@ -28,7 +28,7 @@ export default class Logic {
 			case Kind.Comment:
 				return this.is_amos_yee_comment(post)
 			default:
-				Logger.warn({context: 'is_amos_yee_post', error: {name: 'UnrecognizedKind', message: post.id}})
+				Log.warn('is_amos_yee_post', new InvalidArgumentError(JSON.stringify({id: post.id, kind: post.kind}))).e()
 				return false
 		}
 	}
@@ -37,10 +37,10 @@ export default class Logic {
 		if (!past_threads.some(it=>{
 			return post.thread_id === it.thread_id
 		})) {
-			Logger.info({context: 'is_new_amos_thread', message: {id: post.id, title: post.title}, count: 1})
+			Log.info('is_new_amos_thread', {id: post.id, title: post.title}).count()
 			return true
 		}
-		Logger.info({context: 'is_old_amos_thread', message: {id: post.id, title: post.title}, count: 1})
+		Log.info('is_old_amos_thread', {id: post.id, title: post.title}).count()
 		return false
 	}
 }

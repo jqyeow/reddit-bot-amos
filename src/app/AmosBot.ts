@@ -1,10 +1,9 @@
-import {DB_Posts, Reddit} from './Spring'
+import {DB_Posts, Log, Reddit} from './Spring'
 import Config from './Configuration'
 import Logic from '../util/Logic'
 import {Post} from '../../lib/reddit_api/types/Post.type'
 import Filter from '../util/Filter'
 import {Reply} from './Reply'
-import {Logger} from '../../lib/Logger'
 
 
 export class AmosBot {
@@ -20,7 +19,7 @@ export class AmosBot {
 	async run(): Promise<void> {
 		let posts = await this.retrieve_posts()
 		for (const it of posts) {
-			if (Logic.is_amos_yee_thread(it)
+			if (Logic.is_amos_yee_post(it)
 				&& Logic.is_new_amos_thread(it, this.historic_posts)) {
 				await this.onAmosYeePost(it)
 			}
@@ -37,26 +36,18 @@ export class AmosBot {
 			.filter(Filter.self_posts)
 		let threads = Filter.unread_threads(result[1])
 
-		if (!comments.is_empty()) {Logger.info({
-			context: 'new_comments',
-			message: {subreddit: Config.SUBREDDIT, comments: comments.length},
-			count: comments.length
-		})}
-		if (!threads.is_empty()) { Logger.info({
-			context: 'new_threads',
-			message: {subreddit: Config.SUBREDDIT, threads: threads.length},
-			count: comments.length
-		})}
+		if (!comments.is_empty())
+			Log.info('new_comments', {subreddit: Config.SUBREDDIT, comments: comments.length}).count(comments.length)
+		if (!threads.is_empty())
+			Log.info('new_threads', {subreddit: Config.SUBREDDIT, comments: threads.length}).count(comments.length)
 
 		return ([] as Post[]).concat(comments, threads)
 	}
 
 
 	async onAmosYeePost(post: Post): Promise<void> {
-		Logger.info({context: 'reset_counter',
-			message:{user: post.author, thing_id: post.id},
-			count: 1
-		})
+		Log.info('reset_counter', {user: post.author, thing_id: post.id}).count()
+
 		let text = Reply.reset_counter(post, this.historic_posts.last())
 		await Reddit.reply(post.id, text)
 

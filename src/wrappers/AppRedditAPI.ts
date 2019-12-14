@@ -1,33 +1,26 @@
 import RedditAPI from '../../lib/reddit_api/RedditAPI'
 import {Post} from '../../lib/reddit_api/types/Post.type'
-import {Logger} from "../../lib/Logger";
+import {Log} from '../app/Spring'
 
 export class AppRedditAPI extends RedditAPI {
 	async threads(subreddit: string): Promise<Post[]> {
+		let log = Log.start_timer()
 		let a = await super.threads(subreddit)
-		Logger.metrics({
-			context: 'RedditAPI.threads',
-			elapsed: 0
-		})
+		log.info('RedditAPI.threads', '').track_time().count()
 		return a
 	}
 
 	async comments(subreddit: string): Promise<Post[]> {
+		let log = Log.start_timer()
 		let a = await super.comments(subreddit)
-		Logger.metrics({
-			context: 'RedditAPI.comments',
-			elapsed: 0
-		})
+		log.info('RedditAPI.comments', '').track_time().count()
 		return a
 	}
 
 	async reply(thing_id: string, text: string): Promise<void> {
+		let log = Log.start_timer()
 		let a = await super.reply(thing_id, text)
-		Logger.info({
-			context: 'RedditAPI.reply',
-			message: {thing_id},
-			elapsed: 0
-		})
+		log.info('RedditAPI.reply', thing_id).track_time().count()
 		return a
 	}
 }
