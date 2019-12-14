@@ -12,3 +12,5 @@ jspm_packages
 *.js
 !jest.*.js
 
+.env.development
+.env.testing
