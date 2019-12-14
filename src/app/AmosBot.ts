@@ -4,6 +4,7 @@ import Logic from '../util/Logic'
 import {Post} from '../../lib/reddit_api/types/Post.type'
 import Filter from '../util/Filter'
 import {Reply} from './Reply'
+import {Time} from "../../lib/ext/Time";
 
 
 export class AmosBot {
@@ -11,7 +12,9 @@ export class AmosBot {
 
 	async init(): Promise<void> {
 		this.historic_posts = await DB_Posts.scan()
-		// console.log('Retrieving History: \n' + JSON.stringify(this.historic_posts))
+		this.historic_posts.sort((a,b) => {
+			return (a.date > b.date ? 1 : -1)
+		})
 		console.log(this.historic_posts)
 	}
 

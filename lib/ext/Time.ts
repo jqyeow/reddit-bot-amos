@@ -1,4 +1,8 @@
 export class Time {
+	static now(): Date {
+		return new Date()
+	}
+
 	static epoch(): number {
 		return new Date().getTime()/1000
 	}
@@ -20,7 +24,19 @@ export class Time {
 		return this._elapsed(_start, _end)
 	}
 
-	static _elapsed(start: number, end: number): number {
+	private static _elapsed(start: number, end: number): number {
 		return Math.abs(end - start)
+	}
+
+	static add(seconds: number): Date {
+		return this.date(new Date().getTime() + seconds*1000)
+	}
+
+	static is_after(date: Date): boolean {
+		return new Date().getTime() > date.getTime()
+	}
+
+	static is_before(date: Date): boolean {
+		return new Date().getTime() <= date.getTime()
 	}
 }
