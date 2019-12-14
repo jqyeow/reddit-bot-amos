@@ -135,7 +135,7 @@ export class Logger {
 			timestamp: new Date(),
 			error: e,
 			level,
-			elapsed: this.start_time ? Time.elapsed(this.start_time) : undefined
+			elapsed: this.start_time ? Time.elapsed_ms(this.start_time) : undefined
 		}
 		if (logger._log.level !== LogLevel.SILENT) {
 			logger._log_streams.forEach((stream) => {

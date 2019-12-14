@@ -3,6 +3,9 @@ require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
 class Configuration {
 
 	readonly NODE_ENV: string = Configuration.dotenv('NODE_ENV')
+	readonly SERVICE: string = Configuration.dotenv('SERVICE')
+
+
 	readonly SUBREDDIT: string = Configuration.dotenv('SUBREDDIT')
 	// readonly COOLDOWN: number =
 
@@ -13,9 +16,11 @@ class Configuration {
 	readonly DB_POSTS: string = Configuration.aws_resource('DB_POSTS')
 
 	readonly REDDIT_SELF: string = Configuration.dotenv('REDDIT_SELF')
+	readonly O2A_USER_AGENT: string = `nodejs:${this.SERVICE}:v0.1.0 (by /u/aelesia)`
 	readonly O2A_CLIENT_ID: string = Configuration.dotenv('O2A_CLIENT_ID')
 	readonly O2A_SECRET: string = Configuration.dotenv('O2A_SECRET')
 	readonly O2A_PASSWORD: string = Configuration.dotenv('O2A_PASSWORD')
+
 	/**
 	 *  Generates AWS Resource name using the 'service-node_env-resource' convention
 	 */

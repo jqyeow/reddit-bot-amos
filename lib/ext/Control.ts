@@ -1,10 +1,10 @@
-export async function loop(func:()=>any, func_catch:(e: Error)=>void): Promise<void> {
+export async function loop(func:()=>any, func_catch:(e: Error)=>void, delay?: number): Promise<void> {
 	try {
 		await func()
 	} catch (e) {
 		await func_catch(e)
 	}
-	setTimeout(() => loop(func, func_catch))
+	setTimeout(() => loop(func, func_catch), delay)
 }
 
 export async function sleep(ms: number): Promise<void> {

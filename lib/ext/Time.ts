@@ -11,6 +11,10 @@ export class Time {
 		return new Date(epoch*1000)
 	}
 
+	static elapsed_ms(start: Date): number {
+		return new Date().getTime() - start.getTime()
+	}
+
 	static elapsed(start: Date | number, end?: Date | number): number {
 		let _start
 		if (start instanceof Date) {_start = Time.epoch()}

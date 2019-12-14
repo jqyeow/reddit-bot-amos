@@ -8,6 +8,7 @@ import {RedditAPIErr} from "./RedditAPIErr";
 import TooManyPosts = RedditAPIErr.PostLimit;
 
 type Credentials = {
+	user_agent: string,
 	client_id: string,
 	client_secret: string,
 	password: string,
@@ -28,6 +29,7 @@ export default class RedditAPI {
 					password: credentials.password,
 					username: credentials.username
 				}))
+				.header('User-Agent', credentials.user_agent)
 		}
 	}
 
@@ -86,18 +88,15 @@ export default class RedditAPI {
 	}
 
 	/** @deprecated **/
-	async token(): Promise<Token> {
-		return (await Http.url('https://www.reddit.com/api/v1/access_token')
-			.header('User-Agent', '')
-			.auth_basic('OXd8vQmT6UT-hQ', '5YKPwq082vsk_Eu5IVKvg_6v5TA')
-			.body_forms<TokenForm>({
-				grant_type: 'password',
-				username: 'throwmefuckingaway',
-				password: 'cloud860'
-			})
-			.post<Token>())
-			.data
-	}
+	// async token(): Promise<Token> {
+	// 	return (await Http.url('https://www.reddit.com/api/v1/access_token')
+	// 		.header('User-Agent', '')
+	// 		.auth_basic('OXd8vQmT6UT-hQ', '5YKPwq082vsk_Eu5IVKvg_6v5TA')
+	// 		.body_forms<TokenForm>({
+	// 		})
+	// 		.post<Token>())
+	// 		.data
+	// }
 
 	async me() :Promise<Me> {
 		return (await this.oauth2

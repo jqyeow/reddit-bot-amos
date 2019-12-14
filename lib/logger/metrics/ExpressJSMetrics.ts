@@ -1,7 +1,7 @@
 import express from 'express'
 import * as core from 'express-serve-static-core'
-import {Metric} from '../../aws/CloudwatchMetric'
-import {TimingStream} from "../Logger"
+import {Metric} from '../../aws-cloudwatch-metric/CloudwatchMetric'
+import {TimingStream} from '../Logger'
 
 interface Config {
 	port: number

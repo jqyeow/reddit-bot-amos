@@ -5,8 +5,11 @@ export class Reply {
 
 	static reset_counter(post: Post, last_post: Post): string {
 		let str = ''
-		str += '**RESET THE COUNTER!!**\n\n'
-		str += `It has been ${Reply.adjective()} ${Reply.pretty_time(Time.elapsed(last_post.date, post.date))} since Amos Yee was last brought up\n\n`
+		str += '**RESET THE COUNTER!!!**\n\n'
+		str += 'It has been '
+		str += `_${Reply.adjective()}_ `
+		str += `**${Reply.pretty_time(Time.elapsed(last_post.date, post.date))}** `
+		str += 'since we\'ve had an intellectual discussion about Amos Yee\n\n'
 		str += '----------\n\n'
 		str += `Last mentioned by [${last_post.author}](): [${last_post.title}](${last_post.url})`
 		return str
@@ -34,11 +37,11 @@ export class Reply {
 	}
 
 	private static pretty_time(unix_time: number): string {
-		if (unix_time < 60) {
+		if (unix_time < 120) {
 			return `${Math.floor(unix_time)} second(s)`
-		} else if (unix_time < 3600) {
+		} else if (unix_time < 7200) {
 			return `${Math.floor(unix_time/60)} minute(s)`
-		} else if (unix_time < 86400) {
+		} else if (unix_time < 172800) {
 			return `${Math.floor(unix_time/3600)} hour(s)`
 		} else {
 			return `${Math.floor(unix_time/86400)} day(s)`

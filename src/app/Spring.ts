@@ -7,6 +7,7 @@ import {Logger} from '../../lib/logger/Logger'
 import {ExpressJSMetrics} from '../../lib/logger/metrics/ExpressJSMetrics'
 import {ExpressJSEvents} from '../../lib/logger/analytics/ExpressJSEvents'
 import {ExpressJS} from '../../lib/logger/streams/ExpressJS'
+import {ConsoleStream} from '../../lib/logger/streams/ConsoleStream'
 
 AWS.config.secretAccessKey = Config.AWS_SECRET_ACCESS_KEY
 AWS.config.accessKeyId = Config.AWS_ACCESS_KEY
@@ -15,7 +16,8 @@ export const Reddit = new AppRedditAPI({
 	client_id: Config.O2A_CLIENT_ID,
 	client_secret: Config.O2A_SECRET,
 	password: Config.O2A_PASSWORD,
-	username: Config.REDDIT_SELF
+	username: Config.REDDIT_SELF,
+	user_agent: Config.O2A_USER_AGENT,
 })
 
 // export const DB_Posts = new DBHash<Post>(Config.DB_POSTS)
@@ -23,7 +25,7 @@ export const DB_Posts = new AppDyanmoDB<Post>(Config.AWS_REGION, Config.DB_POSTS
 
 export const Log = new Logger()
 	.add_log_streams(
-		// new ConsoleStream(),
+		new ConsoleStream(),
 		new ExpressJS({max: 1000, path: 'logs', port: 3000})
 	).add_event_streams(
 		new ExpressJSEvents({max: 1000, path: 'events', port: 3001}),
