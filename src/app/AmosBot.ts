@@ -4,7 +4,7 @@ import Logic from '../util/Logic'
 import {Post} from '../../lib/reddit_api/types/Post.type'
 import Filter from '../util/Filter'
 import {Reply} from './Reply'
-import {Time} from "../../lib/ext/Time";
+import {Logger} from '../../lib/Logger'
 
 
 export class AmosBot {
@@ -15,7 +15,6 @@ export class AmosBot {
 		this.historic_posts.sort((a,b) => {
 			return (a.date > b.date ? 1 : -1)
 		})
-		console.log(this.historic_posts)
 	}
 
 	async run(): Promise<void> {
@@ -38,14 +37,26 @@ export class AmosBot {
 			.filter(Filter.self_posts)
 		let threads = Filter.unread_threads(result[1])
 
-		if (!comments.is_empty()) console.log(`${comments.length} new comments from /r/${Config.SUBREDDIT}`)
-		if (!threads.is_empty()) console.log(`${comments.length} new threads from /r/${Config.SUBREDDIT}`)
+		if (!comments.is_empty()) {Logger.info({
+			context: 'new_comments',
+			message: {subreddit: Config.SUBREDDIT, comments: comments.length},
+			count: comments.length
+		})}
+		if (!threads.is_empty()) { Logger.info({
+			context: 'new_threads',
+			message: {subreddit: Config.SUBREDDIT, threads: threads.length},
+			count: comments.length
+		})}
 
 		return ([] as Post[]).concat(comments, threads)
 	}
 
 
 	async onAmosYeePost(post: Post): Promise<void> {
+		Logger.info({context: 'reset_counter',
+			message:{user: post.author, thing_id: post.id},
+			count: 1
+		})
 		let text = Reply.reset_counter(post, this.historic_posts.last())
 		await Reddit.reply(post.id, text)
 

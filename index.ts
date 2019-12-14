@@ -1,4 +1,6 @@
 import {AmosBot} from './src/app/AmosBot'
+import {RedditAPIErr} from "./lib/reddit_api/RedditAPIErr";
+import {Logger} from "./lib/Logger";
 require('./lib/ext/Array');
 
 (async()=>{
@@ -6,7 +8,8 @@ require('./lib/ext/Array');
 	await bot.init()
 	setInterval(()=>{
 		bot.run().catch(e => {
-			console.error(e)
+			if (e instanceof RedditAPIErr.General) Logger.error({context: 'bot', error: e})
+			else if (e instanceof Error) Logger.error({context: 'bot', error: e})
 		})
 	}, 10000)
 })()

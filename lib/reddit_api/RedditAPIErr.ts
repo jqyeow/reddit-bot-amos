@@ -1,4 +1,4 @@
-export namespace Err {
+export namespace RedditAPIErr {
 	export class General extends Error {
 		constructor(msg: string) {
 			super(msg)

@@ -4,8 +4,8 @@ import Http, {OAuth2Token} from '@aelesia/http'
 import {Kind, Post} from './types/Post.type'
 import {JQueryResponse, Token, TokenForm} from './types/RedditAPI.type'
 import {Me} from './types/Me.type'
-import {Err} from "./Err";
-import TooManyPosts = Err.PostLimit;
+import {RedditAPIErr} from "./RedditAPIErr";
+import TooManyPosts = RedditAPIErr.PostLimit;
 
 type Credentials = {
 	client_id: string,
@@ -79,9 +79,9 @@ export default class RedditAPI {
 
 		if (!resp.data.success) {
 			if (JSON.stringify(resp.data.jquery).includes('you are doing that too much')) {
-				throw new Err.PostLimit(`thing_id: ${thing_id}`)
+				throw new RedditAPIErr.PostLimit(`thing_id: ${thing_id}`)
 			}
-			throw new Err.General(`${JSON.stringify(resp.data)}`)
+			throw new RedditAPIErr.General(`${JSON.stringify(resp.data)}`)
 		}
 	}
 

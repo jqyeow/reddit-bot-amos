@@ -1,6 +1,7 @@
 import {Post} from '../../lib/reddit_api/types/Post.type'
 import {bool} from "aws-sdk/clients/signer";
 import Config from "../app/Configuration";
+import {Logger} from "../../lib/Logger";
 
 class Filter {
 
@@ -31,7 +32,7 @@ class Filter {
 
 	self_posts(post: Post): boolean {
 		if (post.author === Config.REDDIT_SELF) {
-			console.log(`Ignoring #${post.id} as it was posted by self`)
+			Logger.info({context: 'self_post', message: {id: post.id}})
 			return false
 		}
 		return true
