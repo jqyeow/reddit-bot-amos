@@ -1,9 +1,9 @@
-import {DB_Posts, Reddit} from "../src/app/Spring";
-import {AmosBot} from "../src/app/AmosBot";
-import {Reply} from "../src/app/Reply";
-import {sleep} from "../lib/ext/Control";
-require('../lib/ext/Array');
-require('../lib/ext/String');
+import {DB_Posts, Reddit} from '../src/app/Spring'
+import {AmosBot} from '../src/app/AmosBot'
+import {Reply} from '../src/app/Reply'
+import {sleep} from '../lib/ext/Control'
+require('../lib/ext/Array')
+require('../lib/ext/String')
 
 describe('Describe', () => {
 
