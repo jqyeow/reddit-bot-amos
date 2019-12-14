@@ -3,24 +3,31 @@ import {Thread, Threads} from './types/Threads.type'
 import Http, {OAuth2Token} from '@aelesia/http'
 import {Kind, Post} from './types/Post.type'
 import {Token, TokenForm} from './types/RedditAPI.type'
-import {Me} from "./types/Me.type";
+import {Me} from './types/Me.type'
+import {strict} from 'assert'
+
+type Credentials = {
+	client_id: string,
+	client_secret: string,
+	password: string,
+	username: string
+}
 
 export default class RedditAPI{
 
-	oauth2_token: OAuth2Token
+	oauth2: Http = null as any
 
-	constructor() {
-		this.oauth2_token = new OAuth2Token({
-			access_token_url: 'https://www.reddit.com/api/v1/access_token',
-			client_id: 'OXd8vQmT6UT-hQ',
-			client_secret: '5YKPwq082vsk_Eu5IVKvg_6v5TA',
-			password: 'cloud860',
-			username: 'throwmefuckingaway'
-		})
-	}
-
-	async init(): Promise<void> {
-		await this.oauth2_token.init()
+	constructor(credentials?: Credentials) {
+		if (credentials) {
+			this.oauth2 = Http.url('').auth_oauth2_password(
+				new OAuth2Token({
+					access_token_url: 'https://www.reddit.com/api/v1/access_token',
+					client_id: credentials.client_id,
+					client_secret: credentials.client_secret,
+					password: credentials.password,
+					username: credentials.username
+				}))
+		}
 	}
 
 	async comments(subreddit: string): Promise<Post[]> {
@@ -96,10 +103,8 @@ export default class RedditAPI{
 	}
 
 	async me() :Promise<Me> {
-		return (await Http
+		return (await this.oauth2
 			.url('https://oauth.reddit.com/api/v1/me')
-			// .auth_bearer(await this.oauth2_token.async_access_token())
-			.auth_oauth2_password(this.oauth2_token)
 			.get<Me>())
 			.data
 	}
