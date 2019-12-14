@@ -17,12 +17,12 @@ export class AmosBot {
 
 	async run(): Promise<void> {
 		let posts = await this.retrieve_posts()
-		posts.forEach(it => {
+		for (const it of posts) {
 			if (Logic.is_amos_yee_thread(it)
 				&& Logic.is_new_amos_thread(it, this.historic_posts)) {
-				this.onAmosYeePost(it)
+				await this.onAmosYeePost(it)
 			}
-		})
+		}
 	}
 
 	async retrieve_posts(): Promise<Post[]> {
@@ -35,8 +35,8 @@ export class AmosBot {
 			.filter(Filter.self_posts)
 		let threads = Filter.unread_threads(result[1])
 
-		if (!comments.is_empty()) console.log(`Retrieved ${comments.length} comments from /r/${Config.SUBREDDIT}`)
-		if (!threads.is_empty()) console.log(`Retrieved ${comments.length} comments from /r/${Config.SUBREDDIT}`)
+		if (!comments.is_empty()) console.log(`${comments.length} new comments from /r/${Config.SUBREDDIT}`)
+		if (!threads.is_empty()) console.log(`${comments.length} new threads from /r/${Config.SUBREDDIT}`)
 
 		return ([] as Post[]).concat(comments, threads)
 	}

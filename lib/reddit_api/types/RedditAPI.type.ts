@@ -10,3 +10,11 @@ export interface TokenForm {
 	username: string,
 	password: string
 }
+
+export interface GenericResponse {
+	success: boolean;
+}
+
+export type JQueryResponse = {
+	jquery:  Array<any[]>;
+} & GenericResponse

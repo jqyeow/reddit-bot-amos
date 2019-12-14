@@ -2,9 +2,10 @@ import {Comment, Comments} from './types/Comments.type'
 import {Thread, Threads} from './types/Threads.type'
 import Http, {OAuth2Token} from '@aelesia/http'
 import {Kind, Post} from './types/Post.type'
-import {Token, TokenForm} from './types/RedditAPI.type'
+import {JQueryResponse, Token, TokenForm} from './types/RedditAPI.type'
 import {Me} from './types/Me.type'
-import {strict} from 'assert'
+import {Err} from "./Err";
+import TooManyPosts = Err.PostLimit;
 
 type Credentials = {
 	client_id: string,
@@ -13,7 +14,7 @@ type Credentials = {
 	username: string
 }
 
-export default class RedditAPI{
+export default class RedditAPI {
 
 	oauth2: Http = null as any
 
@@ -38,7 +39,7 @@ export default class RedditAPI{
 
 		return data.data.children.map<Post>(it=>{
 			return {
-				id: `$t1_${it.data.id}`,
+				id: `t1_${it.data.id}`,
 				author: it.data.author,
 				body: it.data.body,
 				date: it.data.created_utc,
@@ -58,11 +59,11 @@ export default class RedditAPI{
 
 		return data.data.children.map<Post>(it=>{
 			return {
-				id: it.data.id,
+				id: it.data.name,
 				author: it.data.author,
 				body: it.data.selftext,
 				date: it.data.created_utc,
-				kind: Kind.Comment,
+				kind: Kind.Thread,
 				thread_id: it.data.name,
 				title: it.data.title,
 				url: it.data.url
@@ -71,10 +72,17 @@ export default class RedditAPI{
 	}
 
 	async reply(thing_id: string, text: string): Promise<void> {
-		await (this.oauth2
+		let resp = await this.oauth2
 			.url('https://oauth.reddit.com/api/comment')
 			.body_forms({thing_id, text})
-			.post())
+			.post<JQueryResponse>()
+
+		if (!resp.data.success) {
+			if (JSON.stringify(resp.data.jquery).includes('you are doing that too much')) {
+				throw new Err.PostLimit(`thing_id: ${thing_id}`)
+			}
+			throw new Err.General(`${JSON.stringify(resp.data)}`)
+		}
 	}
 
 	/** @deprecated **/
