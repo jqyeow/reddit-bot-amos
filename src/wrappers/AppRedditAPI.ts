@@ -6,14 +6,14 @@ export class AppRedditAPI extends RedditAPI {
 	async threads(subreddit: string): Promise<Post[]> {
 		let log = Log.start_timer()
 		let a = await super.threads(subreddit)
-		log.info('RedditAPI.threads', '').track_time().count()
+		log.silent('RedditAPI.threads', '').track_time().count()
 		return a
 	}
 
 	async comments(subreddit: string): Promise<Post[]> {
 		let log = Log.start_timer()
 		let a = await super.comments(subreddit)
-		log.info('RedditAPI.comments', '').track_time().count()
+		log.silent('RedditAPI.comments', '').track_time().count()
 		return a
 	}
 

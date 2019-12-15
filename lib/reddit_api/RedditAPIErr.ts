@@ -2,7 +2,7 @@ export namespace RedditAPIErr {
 	export class General extends Error {
 		constructor(msg: string) {
 			super(msg)
-			this.name = 'GeneralError'
+			this.name = 'RedditAPIGeneralError'
 			Object.setPrototypeOf(this, General.prototype)
 		}
 	}
@@ -10,7 +10,7 @@ export namespace RedditAPIErr {
 	export class PostLimit extends General {
 		constructor(msg: string) {
 			super(msg)
-			this.name = 'PostLimitError'
+			this.name = 'RedditAPIPostLimitError'
 			Object.setPrototypeOf(this, PostLimit.prototype)
 		}
 	}

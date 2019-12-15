@@ -16,7 +16,7 @@ export interface Log {
 	context: string,
 	timestamp: Date,
 	elapsed?: number,
-	msg?: string,
+	msg?: string | object,
 	error?: Error,
 	level: LogLevel
 }
@@ -120,10 +120,8 @@ export class Logger {
 		let msg
 		let e = undefined
 		if (comment instanceof Error) {
-			msg = comment.message
-			e = comment
-		} else if (typeof comment === 'object') {
 			msg = JSON.stringify(comment)
+			e = comment
 		} else {
 			msg = comment
 		}

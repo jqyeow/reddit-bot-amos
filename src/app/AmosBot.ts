@@ -19,8 +19,7 @@ export class AmosBot {
 	async run(): Promise<void> {
 		let posts = await this.retrieve_posts()
 		for (const it of posts) {
-			if (Logic.is_amos_yee_post(it)
-				&& Logic.is_new_amos_thread(it, this.historic_posts)) {
+			if (Logic.is_amos_yee_post(it) && Logic.is_new_amos_thread(it, this.historic_posts)) {
 				await this.onAmosYeePost(it)
 			}
 		}

@@ -5,7 +5,7 @@ class Configuration {
 	readonly NODE_ENV: string = Configuration.dotenv('NODE_ENV')
 	readonly SERVICE: string = Configuration.dotenv('SERVICE')
 
-
+	readonly INTERVAL: number = '15'.sec()
 	readonly SUBREDDIT: string = Configuration.dotenv('SUBREDDIT')
 	// readonly COOLDOWN: number =
 

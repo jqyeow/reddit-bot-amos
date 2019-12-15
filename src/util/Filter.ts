@@ -31,10 +31,15 @@ class Filter {
 
 	self_posts(post: Post): boolean {
 		if (post.author === Config.REDDIT_SELF) {
-			Log.info('self', {id: post.id})
+			Log.info('filter.self', {id: post.id})
 			return false
 		}
 		return true
+	}
+
+	reset_cache(): void {
+		this.latest_comment_time = 0
+		this.latest_thread_time = 0
 	}
 }
 export default new Filter()

@@ -1,4 +1,6 @@
 import {Log, Logger, LogLevel, LogStream} from '../Logger'
+import {Chalk} from "chalk";
+const chalk = require('chalk')
 
 export class ConsoleStream implements LogStream {
 
@@ -27,10 +29,65 @@ export class ConsoleStream implements LogStream {
 	}
 
 	static _s(log: Log): string {
-		return `[${log.timestamp}]` +
-			` [${LogLevel[log.level]}]` +
-			` [${log.context}]` +
-			` [${log.elapsed != undefined ? log.elapsed + 'ms' : ''}]` +
-			` ${this.stringify(log.msg)}`
+		return `${chalk.gray(log.timestamp.toLocaleString())}` +
+			` ${this.log_level(log)}` +
+			` ${log.elapsed != undefined ? this.left_pad(log.elapsed + 'ms', 7) : this.left_pad('', 7)}` +
+			` ${chalk.green(this.right_pad(log.context, 20))}` +
+			` ${this.print_msg(log.msg)}`
+	}
+
+	static log_level(log: Log): Chalk | string {
+		switch (log.level) {
+			case LogLevel.INFO:
+				return chalk.gray(' INFO')
+			case LogLevel.WARN:
+				return chalk.yellow(' WARN')
+			case LogLevel.ERROR:
+				return chalk.red('ERROR')
+			case LogLevel.FATAL:
+				return chalk.bgRed('FATAL')
+			default:
+				return ''
+		}
+	}
+
+	static print_msg(msg: string | object | undefined): Chalk | string {
+		if (!msg) return ''
+		if (typeof msg === 'object') {
+			msg = JSON.stringify(msg)
+			msg = ConsoleStream.remove(msg, '{', '}', '"')
+			msg = ConsoleStream.replace_all(msg, ',', ', ')
+		}
+		return chalk.white(msg)
+	}
+
+	static replace_all(str: string, search: string, replacement: string): string {
+		return str.replace(new RegExp(search, 'g'), replacement)
+	}
+
+	static remove(original: string, ...char: string[]): string {
+		let str = original
+		for (let i=0; i< char.length; i++) {
+			str = ConsoleStream.replace_all(str, char[i], '')
+		}
+		return str
+	}
+
+	static left_pad(str: string, length: number): string {
+		let a = length - str.length
+		let b = ''
+		for (let i=0; i <a; i++) {
+			b+=' '
+		}
+		return b+str
+	}
+
+	static right_pad(str: string, length: number): string {
+		let a = length - str.length
+		let b = str
+		for (let i=0; i <a; i++) {
+			b+=' '
+		}
+		return b
 	}
 }
