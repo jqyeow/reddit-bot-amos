@@ -8,6 +8,8 @@ import {ExpressJS} from '../../lib/logger/streams/ExpressJS'
 import {ConsoleStream} from '../../lib/logger/streams/ConsoleStream'
 import {MixpanelStream} from '../../lib/logger/analytics/MixpanelAnalytics'
 import {AWSMetrics} from '../../lib/logger/metrics/AWSMetrics'
+import {ExpressJSEvents} from '../../lib/logger/analytics/ExpressJSEvents'
+import {ExpressJSMetrics} from '../../lib/logger/metrics/ExpressJSMetrics'
 
 AWS.config.secretAccessKey = Config.AWS_SECRET_ACCESS_KEY
 AWS.config.accessKeyId = Config.AWS_ACCESS_KEY
@@ -20,20 +22,22 @@ export const Reddit = new AppRedditAPI({
 	user_agent: Config.O2A_USER_AGENT,
 })
 
-// export const DB_Posts = new DBHash<Post>(Config.DB_POSTS)
 export const DB_Posts = new AppDyanmoDB<Post>(Config.AWS_REGION, Config.DB_POSTS)
 
 export const Log = new Logger()
 	.add_log_streams(
 		new ConsoleStream(),
 		new ExpressJS({max: 1000, path: 'logs', port: 3000})
-	).add_event_streams(
-		// new ExpressJSEvents({max: 1000, path: 'events', port: 3001}),
-		new MixpanelStream(Config.MIXPANEL_TOKEN)
-	).add_error_streams(
-		// new ExpressJSEvents({max: 1000, path: 'errors', port: 3002}),
-		new MixpanelStream(Config.MIXPANEL_TOKEN)
-	).add_timing_streams(
-		// new ExpressJSMetrics({max: 1000, path: 'metrics', port: 3003}),
-		new AWSMetrics(Config.SERVICE, Config.AWS_REGION)
+	)
+	.add_event_streams(
+		['development','testing'].includes(Config.NODE_ENV) ?
+			new ExpressJSEvents({max: 1000, path: 'events', port: 3001}): new MixpanelStream(Config.MIXPANEL_TOKEN)
+	)
+	.add_error_streams(
+		['development','testing'].includes(Config.NODE_ENV) ?
+			new ExpressJSEvents({max: 1000, path: 'errors', port: 3002}) : new MixpanelStream(Config.MIXPANEL_TOKEN)
+	)
+	.add_timing_streams(
+		['development','testing'].includes(Config.NODE_ENV) ?
+			new ExpressJSMetrics({max: 1000, path: 'metrics', port: 3003}) : new AWSMetrics(Config.SERVICE, Config.AWS_REGION)
 	)
