@@ -1,6 +1,6 @@
 import {Post} from '../../lib/reddit_api/types/Post.type'
-import Config from '../app/Configuration';
-import {Log} from "../app/Spring";
+import Config from '../app/Configuration'
+import {Log} from '../app/Spring'
 
 class Filter {
 

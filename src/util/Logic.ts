@@ -1,6 +1,6 @@
 import {Kind, Post} from '../../lib/reddit_api/types/Post.type'
-import {Log} from "../app/Spring";
-import {InvalidArgumentError} from "../../lib/ext/Errors";
+import {Log} from '../app/Spring'
+import {InvalidArgumentError} from '../../lib/ext/Errors'
 
 export default class Logic {
 
